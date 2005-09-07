@@ -362,7 +362,7 @@ SinhalaInstance::create_unicode_character_from_lsb(unsigned int lsb)
 bool
 SinhalaInstance::sinhala_transliterated_filter_keypress(const KeyEvent &event)
 {
-	int c, c1, l1;
+	int c;
 	unsigned char *u = NULL;
     WideString widetext;
     char *text;
@@ -435,113 +435,15 @@ SinhalaInstance::sinhala_transliterated_filter_keypress(const KeyEvent &event)
     String tmp = utf8_wcstombs (tmp_wide);
     cursor = tmp.length ();
     text = const_cast<char*> (utf8_wcstombs(widetext).c_str());
+
 	c = find_consonent_by_key(event.code);
-
-	if (c >= 0) { /* a consonent is pressed. */
-		/* do modifiers first. */
-		if (has_surrounding && (cursor >= 3)) {
-			c1 = get_known_lsb_character((unsigned char*)(text + cursor - 3));
-			l1 = find_consonent(c1);
-			/* do modifiers only if there is a valid character before */
-			if (l1 >= 0) {
-				if (event.code == SCIM_KEY_w) {
-					u = create_unicode_character_from_lsb(0xca);
-                    commit_string(utf8_mbstowcs((const char*)u));
-					free(u);
-					return true;
-				}
-				if (event.code == SCIM_KEY_W) {
-					/* bandi hal kireema */
-					u = (unsigned char*)malloc(7);
-					u[0] = 0xe0; u[1] = 0xb7; u[2] = 0x8a;
-					u[3] = 0xe2; u[4] = 0x80; u[5] = 0x8d;
-					u[6] = 0;
-
-                    commit_string(utf8_mbstowcs((const char*)u));
-
-					free(u);
-					return true;
-				}
-				if ((event.code == SCIM_KEY_H) && (consonents[l1].mahaprana)) {
-                    delete_surrounding_text(-1, 1);
-					u = create_unicode_character_from_lsb(consonents[l1].mahaprana);
-                    commit_string(utf8_mbstowcs((const char*)u));
-					free(u);
-					return true;
-				}
-				if ((event.code == SCIM_KEY_G) && (consonents[l1].sagngnaka)) {
-                    delete_surrounding_text(-1, 1);
-					u = create_unicode_character_from_lsb(consonents[l1].sagngnaka);
-                    commit_string(utf8_mbstowcs((const char*)u));
-					free(u);
-					return true;
-				}
-				if (event.code == SCIM_KEY_R) {
-					/* rakaraanshaya */
-					u = (unsigned char*)malloc(10);
-					u[0] = 0xe0; u[1] = 0xb7; u[2] = 0x8a;
-					u[3] = 0xe2; u[4] = 0x80; u[5] = 0x8d;
-					u[6] = 0xe0; u[7] = 0xb6; u[8] = 0xbb;
-					u[9] = 0;
-
-                    commit_string(utf8_mbstowcs((const char*)u));
-
-					free(u);
-					return true;
-				}
-				if (event.code == SCIM_KEY_Y) {
-					/* yansaya */
-					u = (unsigned char*)malloc(10);
-					u[0] = 0xe0; u[1] = 0xb7; u[2] = 0x8a;
-					u[3] = 0xe2; u[4] = 0x80; u[5] = 0x8d;
-					u[6] = 0xe0; u[7] = 0xb6; u[8] = 0xba;
-					u[9] = 0;
-
-                    commit_string(utf8_mbstowcs((const char*)u));
-
-					free(u);
-					return true;
-				}
-			}
-		}
-
-		u = create_unicode_character_from_lsb(consonents[c].character);
-        commit_string(utf8_mbstowcs((const char*)u));
-        free(u);
-		return true;
-		/* end of consonent handling. */
-	}
+	if (c >= 0) /* a consonent is pressed. */
+        return handle_consonant_pressed (event, text, c, cursor);
 
 	c = find_vowel_by_key(event.code);
-	if (c >= 0) {
-		/* a vowel is pressed. */
+	if (c >= 0)
+        return handle_vowel_pressed (event, text, c, cursor);
 
-		/* look for a previous character first. */
-		u = NULL;
-		if (has_surrounding && (cursor >= 3)) {
-			c1 = get_known_lsb_character((unsigned char*)(text + cursor - 3));
-			if (is_consonent(c1)) {
-				u = create_unicode_character_from_lsb(vowels[c].single1);
-			}
-			else if (c1 == vowels[c].single0) {
-                delete_surrounding_text(-1, 1);
-				u = create_unicode_character_from_lsb(vowels[c].double0);
-			}
-			else if (c1 == vowels[c].single1) {
-                delete_surrounding_text(-1, 1);
-				u = create_unicode_character_from_lsb(vowels[c].double1);
-			}
-		}
-
-		if (u == NULL)
-			u = create_unicode_character_from_lsb(vowels[c].single0);
-
-        commit_string(utf8_mbstowcs((const char*)u));
-
-		free(u);
-		return true;
-		/* end of vowel handling. */
-	}
 	if (event.code < 128) {
 		char u[2];
 		u[0] = event.code;
@@ -551,10 +453,124 @@ SinhalaInstance::sinhala_transliterated_filter_keypress(const KeyEvent &event)
 	}
 	if (event.code == SCIM_KEY_BackSpace) {
         //delete_surrounding_text(-1, 1);
-	    return false;
+        return false;
 	}
 
 	return false;
+}
+
+bool
+SinhalaInstance::handle_consonant_pressed(const KeyEvent &event,
+                                          char *text,
+                                          int c, int cursor)
+{
+	int c1, l1;
+	unsigned char *u = NULL;
+
+    /* do modifiers first. */
+    if (text && *text && (cursor >= 3)) {
+        c1 = get_known_lsb_character((unsigned char*)(text + cursor - 3));
+        l1 = find_consonent(c1);
+        /* do modifiers only if there is a valid character before */
+        if (l1 >= 0) {
+            if (event.code == SCIM_KEY_w) {
+                u = create_unicode_character_from_lsb(0xca);
+                commit_string(utf8_mbstowcs((const char*)u));
+                free(u);
+                return true;
+            }
+            if (event.code == SCIM_KEY_W) {
+                /* bandi hal kireema */
+                unsigned char u[7];
+                u[0] = 0xe0; u[1] = 0xb7; u[2] = 0x8a;
+                u[3] = 0xe2; u[4] = 0x80; u[5] = 0x8d;
+                u[6] = 0;
+
+                commit_string(utf8_mbstowcs((const char*)u));
+
+                return true;
+            }
+            if ((event.code == SCIM_KEY_H) && (consonents[l1].mahaprana)) {
+                delete_surrounding_text(-1, 1);
+                u = create_unicode_character_from_lsb(consonents[l1].mahaprana);
+                commit_string(utf8_mbstowcs((const char*)u));
+                free(u);
+                return true;
+            }
+            if ((event.code == SCIM_KEY_G) && (consonents[l1].sagngnaka)) {
+                delete_surrounding_text(-1, 1);
+                u = create_unicode_character_from_lsb(consonents[l1].sagngnaka);
+                commit_string(utf8_mbstowcs((const char*)u));
+                free(u);
+                return true;
+            }
+            if (event.code == SCIM_KEY_R) {
+                /* rakaraanshaya */
+                unsigned char u[10];
+                u[0] = 0xe0; u[1] = 0xb7; u[2] = 0x8a;
+                u[3] = 0xe2; u[4] = 0x80; u[5] = 0x8d;
+                u[6] = 0xe0; u[7] = 0xb6; u[8] = 0xbb;
+                u[9] = 0;
+
+                commit_string(utf8_mbstowcs((const char*)u));
+
+                return true;
+            }
+            if (event.code == SCIM_KEY_Y) {
+                /* yansaya */
+                unsigned char u[10];
+                u[0] = 0xe0; u[1] = 0xb7; u[2] = 0x8a;
+                u[3] = 0xe2; u[4] = 0x80; u[5] = 0x8d;
+                u[6] = 0xe0; u[7] = 0xb6; u[8] = 0xba;
+                u[9] = 0;
+
+                commit_string(utf8_mbstowcs((const char*)u));
+
+                return true;
+            }
+        }
+    }
+
+    u = create_unicode_character_from_lsb(consonents[c].character);
+    commit_string(utf8_mbstowcs((const char*)u));
+    free(u);
+
+    return true;
+}
+
+bool
+SinhalaInstance::handle_vowel_pressed(const KeyEvent &event,
+                                      char *text,
+                                      int c, int cursor)
+{
+	int c1;
+	unsigned char *u = NULL;
+
+    /* look for a previous character first. */
+    u = NULL;
+    if (text && *text && (cursor >= 3)) {
+        c1 = get_known_lsb_character((unsigned char*)(text + cursor - 3));
+        if (is_consonent(c1)) {
+            u = create_unicode_character_from_lsb(vowels[c].single1);
+        }
+        else if (c1 == vowels[c].single0) {
+            delete_surrounding_text(-1, 1);
+            u = create_unicode_character_from_lsb(vowels[c].double0);
+        }
+        else if (c1 == vowels[c].single1) {
+            delete_surrounding_text(-1, 1);
+            u = create_unicode_character_from_lsb(vowels[c].double1);
+        }
+    }
+
+    if (u == NULL)
+        u = create_unicode_character_from_lsb(vowels[c].single0);
+
+    commit_string(utf8_mbstowcs((const char*)u));
+
+    free(u);
+
+    return true;
 }
 
 /*

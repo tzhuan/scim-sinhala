@@ -114,6 +114,7 @@ SinhalaFactory::SinhalaFactory (const String &lang,
 
 SinhalaFactory::~SinhalaFactory ()
 {
+    m_reload_signal_connection.disconnect ();
 }
 
 WideString

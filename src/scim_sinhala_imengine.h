@@ -90,7 +90,8 @@ private:
                                                       int cursor);
     bool   handle_vowel_pressed                      (const KeyEvent &event,
                                                       char *text,
-                                                      int c, int cursor);
+                                                      int c,
+                                                      int cursor);
 };
 #endif /* __SCIM_CANNA_IMENGINE_H__ */
 /*

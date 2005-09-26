@@ -1,0 +1,4 @@
+Overview of Changes from scim-sinhala-0.0.0 to scim-sinhala-0.1.0
+=================================================================
+* Fix a clash bug on exiting scim-setup.
+* Fix a bug that the icon file name was wrong (not scim-canna).

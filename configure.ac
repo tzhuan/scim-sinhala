@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT(scim-sinhala, 0.0.0, poincare@ikezoe.net)
+AC_INIT(scim-sinhala, 0.1.0, mover@hct.zaq.ne.jp)
 AC_CONFIG_SRCDIR([configure.ac])
 
 # Save this value here, since automake will set cflags and cxxflags later
@@ -7,7 +7,7 @@ cflags_set=${CFLAGS+set}
 cppflags_set=${CPPFLAGS+set}
 
 SCIM_SINHALA_MAJOR_VERSION=0
-SCIM_SINHALA_MINOR_VERSION=0
+SCIM_SINHALA_MINOR_VERSION=1
 SCIM_SINHALA_MICRO_VERSION=0
 
 SCIM_SINHALA_VERSION=$SCIM_SINHALA_MAJOR_VERSION.$SCIM_SINHALA_MINOR_VERSION.$SCIM_SINHALA_MICRO_VERSION

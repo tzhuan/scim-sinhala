@@ -114,6 +114,7 @@ SinhalaFactory::SinhalaFactory (const String &lang,
 
 SinhalaFactory::~SinhalaFactory ()
 {
+    m_reload_signal_connection.disconnect ();
 }
 
 WideString
@@ -158,22 +159,9 @@ SinhalaFactory::create_instance (const String &encoding, int id)
     return new SinhalaInstance (this, encoding, id);
 }
 
-#define APPEND_ACTION(key, func) \
-{ \
-    String name = "func", str; \
-    str = config->read (String (SCIM_SINHALA_CONFIG_##key##_KEY), \
-                        String (SCIM_SINHALA_CONFIG_##key##_KEY_DEFAULT)); \
-    m_actions.push_back (SinhalaAction (name, str, &SinhalaInstance::func)); \
-}
-
 void
 SinhalaFactory::reload_config (const ConfigPointer &config)
 {
     if (!config) return;
-
-    m_actions.clear ();
-
-    // edit keys
-    //APPEND_ACTION (COMMIT,                  action_commit_with_learn);
 }
 

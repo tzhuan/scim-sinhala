@@ -13,51 +13,40 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/scim_canna_imengine_setup.cpp:83
 #, fuzzy
-msgid "Canna"
-msgstr "かな"
+#~ msgid "Canna"
+#~ msgstr "かな"
 
-#: src/scim_canna_imengine_setup.cpp:88
 #, fuzzy
-msgid "An Canna IMEngine Module."
-msgstr "PRIME IMEngineモジュール"
+#~ msgid "An Canna IMEngine Module."
+#~ msgstr "PRIME IMEngineモジュール"
 
-#: src/scim_canna_imengine_setup.cpp:204
-msgid "Common keys"
-msgstr "一般キー"
+#~ msgid "Common keys"
+#~ msgstr "一般キー"
 
-#: src/scim_canna_imengine_setup.cpp:205
-msgid "Mode keys"
-msgstr "モードキー"
+#~ msgid "Mode keys"
+#~ msgstr "モードキー"
 
-#: src/scim_canna_imengine_setup.cpp:206
-msgid "Caret keys"
-msgstr "キャレットキー"
+#~ msgid "Caret keys"
+#~ msgstr "キャレットキー"
 
-#: src/scim_canna_imengine_setup.cpp:208
-msgid "Candidates keys"
-msgstr "候補選択キー"
+#~ msgid "Candidates keys"
+#~ msgstr "候補選択キー"
 
-#: src/scim_canna_imengine_setup.cpp:209
-msgid "Candidates keys (Direct select)"
-msgstr "候補選択キー (直接選択)"
+#~ msgid "Candidates keys (Direct select)"
+#~ msgstr "候補選択キー (直接選択)"
 
-#: src/scim_canna_imengine_setup.cpp:297 src/scim_canna_imengine_setup.cpp:302
-msgid "Predict while typing letters."
-msgstr "文字入力中に予測する"
+#~ msgid "Predict while typing letters."
+#~ msgstr "文字入力中に予測する"
 
-#: src/scim_canna_imengine_setup.cpp:402
-msgid "Options"
-msgstr "オプション"
+#~ msgid "Options"
+#~ msgstr "オプション"
 
-#: src/scim_canna_imengine_setup.cpp:409
-msgid "Toolbar"
-msgstr "ツールバー"
+#~ msgid "Toolbar"
+#~ msgstr "ツールバー"
 
-#: src/scim_canna_imengine_setup.cpp:415
-msgid "Dictionary"
-msgstr "辞書"
+#~ msgid "Dictionary"
+#~ msgstr "辞書"
 
 #~ msgid "PRIME"
 #~ msgstr "PRIME"

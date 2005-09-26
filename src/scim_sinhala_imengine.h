@@ -77,13 +77,21 @@ private:
     bool   process_remaining_key_event         (const KeyEvent &key);
 
     /* sinhala related functions */
-    int    get_known_lsb_character(unsigned char *text);
-    int    is_consonent(int c);
-    int    find_consonent_by_key(int k);
-    int    find_consonent(int c);
-    int    find_vowel_by_key(int k);
-    unsigned char* create_unicode_character_from_lsb(unsigned int lsb);
-    bool   sinhala_transliterated_filter_keypress(const KeyEvent &key);    
+    int    get_known_lsb_character                   (unsigned char *text);
+    int    is_consonent                              (int c);
+    int    find_consonent_by_key                     (int k);
+    int    find_consonent                            (int c);
+    int    find_vowel_by_key                         (int k);
+    unsigned char* create_unicode_character_from_lsb (unsigned int lsb);
+    bool   sinhala_transliterated_filter_keypress    (const KeyEvent &key);    
+    bool   handle_consonant_pressed                  (const KeyEvent &event,
+                                                      char *text,
+                                                      int c,
+                                                      int cursor);
+    bool   handle_vowel_pressed                      (const KeyEvent &event,
+                                                      char *text,
+                                                      int c,
+                                                      int cursor);
 };
 #endif /* __SCIM_CANNA_IMENGINE_H__ */
 /*

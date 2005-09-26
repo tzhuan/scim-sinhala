@@ -1,3 +1,2 @@
-src/scim_canna_imengine.cpp
-src/scim_canna_imengine_factory.cpp
-src/scim_canna_imengine_setup.cpp
+src/scim_sinhala_imengine.cpp
+src/scim_sinhala_imengine_factory.cpp
